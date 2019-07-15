@@ -31,8 +31,8 @@ class Cat implements CreaturesInterface
   }
 }
 
-// 動作クラス
-class Movements
+// 動作クラス(DI対応)
+class MovementsDI
 {
   private $creatures;
 
@@ -47,13 +47,39 @@ class Movements
   }
 }
 
+// 動作クラス(DI未対応)
+class MovementsNotDI
+{
+  private $creatures;
+
+  public function __construct()
+  {
+    $this->dog = new Dog();
+    $this->cat = new Cat();
+  }
+
+  public function cry()
+  {
+    echo "Cries of dogs: " . $this->dog->cry() . "\n";
+    echo "Cries of cats: " . $this->cat->cry() . "\n";
+  }
+}
 
 // 実行部分
 $dog = new Dog();
 $cat = new Cat();
 
-$dogMovements = new Movements($dog);
-$catMovements = new Movements($cat);
+// DI対応
+$dogMovements = new MovementsDI($dog);
+$catMovements = new MovementsDI($cat);
 
+echo "exec DI Pattern\n";
 echo "Cries of dogs: " . $dog->cry() . "\n";
 echo "Cries of Cats: " . $cat->cry() . "\n";
+
+echo "\n";
+
+// DI未対応
+$movements = new MovementsNotDI();
+echo "exec Not DI Pattern\n";
+$movements->cry();
